@@ -12,7 +12,7 @@ import { LoginData } from '@/types';
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<any>({});
+const [errors, setErrors] = useState<Record<string, string | string[]>>({});
   const [formData, setFormData] = useState<LoginData>({
     email: '',
     password: '',
@@ -22,7 +22,7 @@ export default function LoginPage() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors((prev: any) => ({ ...prev, [name]: null }));
+setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -44,8 +44,8 @@ export default function LoginPage() {
           router.push('/product/1');
         }
       }
-    } catch (error: any) {
-      if (error.response?.data?.errors) {
+} catch (error: unknown) {
+  const err = error as { response?: { data?: { errors?: Record<string, string[]>; message?: string } } };      if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
       } else if (error.response?.data?.message) {
         setErrors({ general: error.response.data.message });
@@ -143,8 +143,7 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Don't have an account?{' '}
-              <Link
+Don&apos;t have an account?{' '}              <Link
                 href="/register"
                 className="text-primary font-semibold hover:text-primary-dark transition-colors"
               >
