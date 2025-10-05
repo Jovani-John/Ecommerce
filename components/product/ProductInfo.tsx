@@ -27,59 +27,61 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   const sizes = ['XS', 'S', 'M', 'L', 'XL', '2Xl'];
 
   const handleQuantityChange = (type: 'increment' | 'decrement') => {
-    if (type === 'increment') {
-      setQuantity((prev) => prev + 1);
-    } else if (type === 'decrement' && quantity > 1) {
-      setQuantity((prev) => prev - 1);
-    }
+    if (type === 'increment') setQuantity((prev) => prev + 1);
+    else if (type === 'decrement' && quantity > 1) setQuantity((prev) => prev - 1);
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-6">
-        <span className="inline-block px-3 py-1 text-[#C89C7C] border border-[#C89C7C] text-xs font-medium rounded-full bg-white">
+    <div className="flex flex-col h-full p-4 sm:p-6 md:p-8 lg:p-10 max-w-2xl mx-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <span className="inline-block px-3 py-1 text-[#C89C7C] border border-[#C89C7C] text-xs sm:text-sm font-medium rounded-full bg-white">
           T-Shirt
         </span>
 
-        <div className="flex items-center gap-3">
-          <button className="w-9 h-9 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button className="w-9 h-9 sm:w-10 sm:h-10 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center transition">
             <Share2 size={18} className="text-gray-600" />
           </button>
-          <button className="w-9 h-9 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center">
+          <button className="w-9 h-9 sm:w-10 sm:h-10 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center transition">
             <Heart size={18} className="text-gray-600" />
           </button>
         </div>
       </div>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
+      {/* Title */}
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight">
         {product.name}
       </h1>
 
-      <div className="flex items-center gap-3 mb-1">
-        <span className="text-3xl font-bold text-gray-900">
+      {/* Price */}
+      <div className="flex items-center gap-3 mb-2 flex-wrap">
+        <span className="text-2xl sm:text-3xl font-bold text-gray-900">
           ${product.price.toFixed(2)}
         </span>
         {product.originalPrice && (
-          <span className="text-xl text-gray-400 line-through">
+          <span className="text-lg sm:text-xl text-gray-400 line-through">
             ${product.originalPrice.toFixed(2)}
           </span>
         )}
       </div>
 
-      <p className="text-gray-500 text-xs mb-6">This price is exclusive of taxes</p>
+      <p className="text-gray-500 text-xs sm:text-sm mb-6">This price is exclusive of taxes</p>
 
-      <p className="text-gray-600 text-sm leading-relaxed mb-6">
+      {/* Description */}
+      <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">
         {product.description}
       </p>
 
+      {/* Type Selector */}
       <div className="mb-5">
         <label className="block text-sm font-semibold text-gray-900 mb-2">Type</label>
         <div className="relative">
           <button
             onClick={() => setIsTypeOpen(!isTypeOpen)}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md flex items-center justify-between hover:border-gray-400 transition-colors bg-white text-sm"
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-md flex items-center justify-between hover:border-gray-400 transition bg-white text-sm"
           >
-            <span className="text-gray-900">{selectedType}</span>
+            <span>{selectedType}</span>
             <ChevronDown
               size={18}
               className={`text-gray-500 transition-transform ${isTypeOpen ? 'rotate-180' : ''}`}
@@ -103,7 +105,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                         setSelectedType(type);
                         setIsTypeOpen(false);
                       }}
-                      className="w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors text-sm"
+                      className="w-full px-4 py-2.5 text-left hover:bg-gray-50 transition text-sm"
                     >
                       <span className={selectedType === type ? 'font-semibold text-gray-900' : 'text-gray-700'}>
                         {type}
@@ -117,14 +119,15 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         </div>
       </div>
 
+      {/* Size Selector */}
       <div className="mb-6">
         <label className="block text-sm font-semibold text-gray-900 mb-2">Size</label>
         <div className="relative">
           <button
             onClick={() => setIsSizeOpen(!isSizeOpen)}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-md flex items-center justify-between hover:border-gray-400 transition-colors bg-white text-sm"
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-md flex items-center justify-between hover:border-gray-400 transition bg-white text-sm"
           >
-            <span className="text-gray-900">{selectedSize}</span>
+            <span>{selectedSize}</span>
             <ChevronDown
               size={18}
               className={`text-gray-500 transition-transform ${isSizeOpen ? 'rotate-180' : ''}`}
@@ -148,7 +151,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                         setSelectedSize(size);
                         setIsSizeOpen(false);
                       }}
-                      className="w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors text-sm"
+                      className="w-full px-4 py-2.5 text-left hover:bg-gray-50 transition text-sm"
                     >
                       <span className={selectedSize === size ? 'font-semibold text-gray-900' : 'text-gray-700'}>
                         {size}
@@ -162,6 +165,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         </div>
       </div>
 
+      {/* Colors */}
       <div className="mb-6">
         <label className="block text-sm font-semibold text-gray-900 mb-3">Colors</label>
         <div className="flex gap-2.5 flex-wrap mb-2">
@@ -169,7 +173,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             <button
               key={color.id}
               onClick={() => setSelectedColor(color.id)}
-              className={`relative w-10 h-10 rounded-full transition-all ${
+              className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all ${
                 selectedColor === color.id
                   ? 'ring-2 ring-gray-900 ring-offset-2'
                   : 'hover:ring-2 hover:ring-gray-300 hover:ring-offset-2'
@@ -187,37 +191,43 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         </p>
       </div>
 
+      {/* Quantity + Add to Cart */}
       <div className="mb-6">
         <label className="block text-sm font-semibold text-gray-900 mb-3">
-          Quantity <span className="text-gray-500 font-normal text-xs">(${product.price.toFixed(2)} for Piece)</span>
+          Quantity{' '}
+          <span className="text-gray-500 font-normal text-xs">
+            (${product.price.toFixed(2)} for Piece)
+          </span>
         </label>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden">
+
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden self-start sm:self-auto">
             <button
               onClick={() => handleQuantityChange('decrement')}
-              className="w-11 h-11 hover:bg-gray-50 transition-colors text-gray-600 font-normal text-xl flex items-center justify-center disabled:opacity-50"
+              className="w-10 h-10 sm:w-11 sm:h-11 hover:bg-gray-50 transition text-gray-600 text-xl flex items-center justify-center disabled:opacity-50"
               disabled={quantity <= 1}
             >
               −
             </button>
-            <div className="w-14 h-11 font-medium text-gray-900 border-x border-gray-300 text-center flex items-center justify-center text-base">
+            <div className="w-12 sm:w-14 h-10 sm:h-11 font-medium text-gray-900 border-x border-gray-300 text-center flex items-center justify-center text-base">
               {quantity.toString().padStart(2, '0')}
             </div>
             <button
               onClick={() => handleQuantityChange('increment')}
-              className="w-11 h-11 hover:bg-gray-50 transition-colors text-gray-600 font-normal text-xl flex items-center justify-center"
+              className="w-10 h-10 sm:w-11 sm:h-11 hover:bg-gray-50 transition text-gray-600 text-xl flex items-center justify-center"
             >
               +
             </button>
           </div>
-          <span className="text-2xl font-bold text-gray-900">
+
+          <span className="text-xl sm:text-2xl font-bold text-gray-900">
             ${(product.price * quantity).toFixed(2)}
           </span>
-<button className="w-[190px] bg-[#C89C7C] hover:bg-[#B38A6A] text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 transition-all ">
-  <span className="text-sm">Add To Cart</span>
-  <Lock size={15} />
-</button>
 
+          <button className="w-full sm:w-[190px] bg-[#C89C7C] hover:bg-[#B38A6A] text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm">
+            <span className="text-sm">Add To Cart</span>
+            <Lock size={15} />
+          </button>
         </div>
       </div>
     </div>
