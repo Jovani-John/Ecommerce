@@ -120,12 +120,12 @@ export default function RegisterPage() {
                   Code
                 </label>
                 <div className="relative">
-                  <Globe size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 sm:w-5 sm:h-5" />
+                  <Globe size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none sm:w-5 sm:h-5" />
                   <select
                     name="mobile_country_code"
                     value={formData.mobile_country_code}
                     onChange={handleChange}
-                    className="w-full pl-9 sm:pl-10 pr-2 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full pl-10 sm:pl-11 pr-3 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-white"
                   >
                     <option value="971">+971</option>
                     <option value="20">+20</option>
