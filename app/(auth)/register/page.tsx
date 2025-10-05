@@ -13,7 +13,7 @@ import { RegisterData } from '@/types';
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string | string[]>>({});
   const [formData, setFormData] = useState<RegisterData>({
     name: '',
     email: '',
@@ -27,7 +27,7 @@ export default function RegisterPage() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors((prev: any) => ({ ...prev, [name]: null }));
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -44,11 +44,12 @@ export default function RegisterPage() {
         authService.saveUser(response.data);
         router.push('/verify');
       }
-    } catch (error: any) {
-      if (error.response?.data?.errors) {
-        setErrors(error.response.data.errors);
-      } else if (error.response?.data?.message) {
-        setErrors({ general: error.response.data.message });
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { errors?: Record<string, string[]>; message?: string } } };
+      if (err.response?.data?.errors) {
+        setErrors(err.response.data.errors);
+      } else if (err.response?.data?.message) {
+        setErrors({ general: err.response.data.message });
       } else {
         setErrors({ general: 'Registration failed. Please try again.' });
       }
@@ -58,37 +59,37 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-secondary/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-secondary/5 flex items-center justify-center p-3 sm:p-4 md:p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="text-center mb-8">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-5 sm:p-6 md:p-8">
+          <div className="text-center mb-6 sm:mb-8">
             <motion.h1
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-3xl font-bold text-gray-900 mb-2"
+              className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2"
             >
               Create Account
             </motion.h1>
-            <p className="text-gray-600">Join us today and start shopping</p>
+            <p className="text-sm sm:text-base text-gray-600">Join us today and start shopping</p>
           </div>
 
           {errors.general && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm"
+              className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-xs sm:text-sm"
             >
               {errors.general}
             </motion.div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
             <Input
               label="Full Name"
               name="name"
@@ -96,7 +97,7 @@ export default function RegisterPage() {
               placeholder="Enter your full name"
               value={formData.name}
               onChange={handleChange}
-              icon={<User size={20} />}
+              icon={<User size={18} className="sm:w-5 sm:h-5" />}
               error={errors.name?.[0]}
               required
             />
@@ -108,23 +109,23 @@ export default function RegisterPage() {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              icon={<Mail size={20} />}
+              icon={<Mail size={18} className="sm:w-5 sm:h-5" />}
               error={errors.email?.[0]}
               required
             />
 
-            <div className="grid grid-cols-3 gap-2">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2">
+              <div className="sm:col-span-1">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                   Code
                 </label>
                 <div className="relative">
-                  <Globe size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Globe size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 sm:w-5 sm:h-5" />
                   <select
                     name="mobile_country_code"
                     value={formData.mobile_country_code}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-2 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full pl-9 sm:pl-10 pr-2 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="971">+971</option>
                     <option value="20">+20</option>
@@ -134,7 +135,7 @@ export default function RegisterPage() {
                 </div>
               </div>
               
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <Input
                   label="Phone Number"
                   name="mobile"
@@ -142,7 +143,7 @@ export default function RegisterPage() {
                   placeholder="501234567"
                   value={formData.mobile}
                   onChange={handleChange}
-                  icon={<Phone size={20} />}
+                  icon={<Phone size={18} className="sm:w-5 sm:h-5" />}
                   error={errors.mobile?.[0]}
                   required
                 />
@@ -156,7 +157,7 @@ export default function RegisterPage() {
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
-              icon={<Lock size={20} />}
+              icon={<Lock size={18} className="sm:w-5 sm:h-5" />}
               error={errors.password?.[0]}
               required
             />
@@ -168,7 +169,7 @@ export default function RegisterPage() {
               placeholder="Confirm your password"
               value={formData.password_confirmation}
               onChange={handleChange}
-              icon={<Lock size={20} />}
+              icon={<Lock size={18} className="sm:w-5 sm:h-5" />}
               error={errors.password_confirmation?.[0]}
               required
             />
@@ -179,14 +180,14 @@ export default function RegisterPage() {
               size="lg"
               fullWidth
               loading={loading}
-              className="mt-6"
+              className="mt-4 sm:mt-6"
             >
               Create Account
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
+          <div className="mt-4 sm:mt-6 text-center">
+            <p className="text-sm sm:text-base text-gray-600">
               Already have an account?{' '}
               <Link
                 href="/login"
