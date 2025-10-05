@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ShoppingCart,
   Heart,
@@ -14,6 +15,7 @@ import {
   User,
   ChevronDown,
   Menu,
+  X,
 } from 'lucide-react';
 import { authService } from '@/lib/api/auth';
 import { UserData } from '@/types';
@@ -36,18 +38,22 @@ export default function ProductHeader() {
 
   return (
     <header className="shadow-sm sticky top-0 z-50 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           
-          <Link href="/" className="flex items-center">
-            <img
+          {/* Logo */}
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <Image
               src="/logo.png"
               alt="Logo"
-              className="h-10 w-auto object-contain"
+              width={120}
+              height={40}
+              className="h-8 sm:h-10 w-auto object-contain"
             />
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-6 flex-1 justify-center">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 flex-1 justify-center">
             <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition">
               <Home size={18} />
               <span className="text-sm font-medium">Home</span>
@@ -70,41 +76,47 @@ export default function ProductHeader() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-4">
-            <button className="relative text-gray-700 hover:text-gray-900 transition hidden md:block">
-              <ShoppingCart size={22} strokeWidth={1.5} />
+          {/* Right Side Icons */}
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+            {/* Cart - Hidden on small mobile */}
+            <button className="relative text-gray-700 hover:text-gray-900 transition hidden sm:block">
+              <ShoppingCart size={20} className="sm:w-[22px] sm:h-[22px]" strokeWidth={1.5} />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
               )}
             </button>
 
+            {/* Notifications - Hidden on mobile */}
             <button className="relative text-gray-700 hover:text-gray-900 transition hidden md:block">
               <Bell size={22} strokeWidth={1.5} />
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
             </button>
 
+            {/* Wishlist - Hidden on mobile */}
             <button className="text-gray-700 hover:text-gray-900 transition hidden md:block">
               <Heart size={22} strokeWidth={1.5} />
             </button>
 
+            {/* Language - Hidden on mobile */}
             <button className="hidden md:flex items-center gap-1 px-2 py-1 text-gray-700 hover:text-gray-900 transition">
               <span className="text-sm font-medium">EN</span>
               <ChevronDown size={14} />
             </button>
 
+            {/* User Menu - Desktop */}
             {user ? (
               <div className="relative hidden md:block">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition"
+                  className="flex items-center gap-1 sm:gap-2 text-gray-700 hover:text-gray-900 transition"
                 >
-                  <span className="text-sm font-medium">
+                  <span className="text-xs sm:text-sm font-medium">
                     HELLO,{' '}
                     <span className="font-bold">
                       {user.name.split(' ')[0].toUpperCase()}
                     </span>
                   </span>
-                  <User size={22} strokeWidth={1.5} />
+                  <User size={20} className="sm:w-[22px] sm:h-[22px]" strokeWidth={1.5} />
                   <ChevronDown size={14} />
                 </button>
 
@@ -118,12 +130,14 @@ export default function ProductHeader() {
                       <Link
                         href="/dashboard"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsUserMenuOpen(false)}
                       >
                         Dashboard
                       </Link>
                       <Link
                         href="/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsUserMenuOpen(false)}
                       >
                         Profile
                       </Link>
@@ -147,46 +161,123 @@ export default function ProductHeader() {
               </Link>
             )}
 
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-gray-700 block"
+              className="lg:hidden text-gray-700 p-1"
+              aria-label="Toggle menu"
             >
-              <Menu size={26} />
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t py-4 animate-slideDown">
-            <div className="space-y-3">
+          <div className="lg:hidden border-t py-3 sm:py-4 animate-slideDown">
+            <div className="space-y-1">
               {user && (
-                <div className="px-4 py-2 bg-gray-50 rounded-lg mb-3">
-                  <span className="text-sm">HELLO, </span>
-                  <span className="text-sm font-bold">
+                <div className="px-3 sm:px-4 py-2 bg-gray-50 rounded-lg mb-3">
+                  <span className="text-xs sm:text-sm">HELLO, </span>
+                  <span className="text-xs sm:text-sm font-bold">
                     {user.name.toUpperCase()}
                   </span>
                 </div>
               )}
-              <Link href="/" className="flex items-center gap-3 px-4 py-2 text-gray-700">
+              
+              <Link 
+                href="/" 
+                className="flex items-center gap-3 px-3 sm:px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <Home size={18} />
-                <span>Home</span>
+                <span className="text-sm">Home</span>
               </Link>
-              <Link href="/category" className="flex items-center gap-3 px-4 py-2 text-gray-700">
+              
+              <Link 
+                href="/category" 
+                className="flex items-center gap-3 px-3 sm:px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <Grid size={18} />
-                <span>Our Category</span>
+                <span className="text-sm">Our Category</span>
               </Link>
-              <Link href="/about" className="flex items-center gap-3 px-4 py-2 text-gray-700">
+              
+              <Link 
+                href="/about" 
+                className="flex items-center gap-3 px-3 sm:px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <Info size={18} />
-                <span>About Us</span>
+                <span className="text-sm">About Us</span>
               </Link>
-              <Link href="/contact" className="flex items-center gap-3 px-4 py-2 text-gray-700">
+              
+              <Link 
+                href="/contact" 
+                className="flex items-center gap-3 px-3 sm:px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <Phone size={18} />
-                <span>Contact Us</span>
+                <span className="text-sm">Contact Us</span>
               </Link>
-              <Link href="/faq" className="flex items-center gap-3 px-4 py-2 text-gray-700">
+              
+              <Link 
+                href="/faq" 
+                className="flex items-center gap-3 px-3 sm:px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <HelpCircle size={18} />
-                <span>FAQs</span>
+                <span className="text-sm">FAQs</span>
               </Link>
+
+              {/* Mobile Quick Actions */}
+              <div className="flex items-center gap-3 px-3 sm:px-4 py-3 border-t mt-2">
+                <button className="relative flex items-center gap-2 text-gray-700">
+                  <ShoppingCart size={20} />
+                  <span className="text-sm">Cart</span>
+                  {cartCount > 0 && (
+                    <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {user ? (
+                <div className="px-3 sm:px-4 py-2 border-t mt-2 space-y-1">
+                  <Link
+                    href="/dashboard"
+                    className="block py-2 text-sm text-gray-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="block py-2 text-sm text-gray-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left py-2 text-sm text-red-600"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="px-3 sm:px-4 py-2 border-t mt-2">
+                  <Link
+                    href="/login"
+                    className="flex items-center gap-2 text-gray-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <User size={18} />
+                    <span className="text-sm">Login</span>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
